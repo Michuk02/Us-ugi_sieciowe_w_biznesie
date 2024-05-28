@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block body %}
+<div class="container">
+    <h2 style="text-align: center;">Checkout</h2>
+    <table class="table table-hover table-dark">
+        <thead>
+            <tr>
+                <th scope="col">Nazwa</th>
+                <th scope="col">Kod kreskowy</th>
+                <th scope="col">Cena</th>
+                <th scope="col">Ilość</th>
+                <th scope="col">Łączna cena</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for owned_item in owned_items %}
+            <tr>
+                <td>{{ owned_item.name }}</td>
+                <td>{{ owned_item.barcode }}</td>
+                <td>{{ owned_item.prettier_price }}</td>
+                <td>{{ user.items.__len__() }}</td>
+                <td>{{ owned_item.prettier_price * user.items.__len__()  }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <h3>Total: {{ total_price }} $</h3>
+</div>
+{% endblock %}

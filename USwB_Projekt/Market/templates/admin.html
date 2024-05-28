@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Panel admina{% endblock %}
+{% block body %}
+<div class="row" style="margin-top: 20px; margin-left: 20px;">
+    <div class="col-8">
+        <h2 style="text-align: center;">Kontroluj produkty</h2>
+        <table class="table table-hover table-dark">
+            <thead>
+                <tr>
+                    <th scope="col">Nazwa</th>
+                    <th scope="col">Cena</th>
+                    <th scope="col">Właściciel</th>
+                    <th scope="col">Zarządzanie</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.prettier_price }}</td>
+                    <td>{{ item.owned_user.username }}</td>
+                    <td>
+                        {% if item in owned_items %}
+                            <button class="btn btn-outline btn-info" disabled>Zmień</button>
+                            <button class="btn btn-outline btn-danger" disabled>Usuń</button>
+                        {% else %}
+                            <button class="btn btn-outline btn-info" data-toggle="modal" data-target="#UpdateModal-{{ item.id }}">Zmień</button>
+                            <button class="btn btn-outline btn-danger" data-toggle="modal" data-target="#DeleteModal-{{ item.id }}">Usuń</button>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% include 'modals/zmien_produkt.html' %}
+                {% include 'modals/usun_produkt.html' %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="col-4">
+        <h2 style="text-align: center;">Kontroluj użytkowników</h2>
+        <table class="table table-hover table-dark">
+            <thead>
+                <tr>
+                    <th scope="col">Login</th>
+                    <th scope="col">Koszyk</th>
+                    <th scope="col">Zarządzanie</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user.username }}</td>
+                    <td>{% if user.items.__len__() != 0 %}<strong>{{ user.items.__len__() }}</strong> Przedmiot{% else %}Pusty{% endif %}</td>
+                    <td>
+                        {% if user.username != 'admin' %}
+                        <button class="btn btn-outline btn-danger" data-toggle="modal" data-target="#DeleteUserModal-{{ user.id }}">Usuń</button>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% include 'modals/usun_usera.html' %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
