@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block body %}
+<div class="row" style="margin-top:20px; margin-left:20px">
+    <div class="col-8">
+        <h2 style="text-align: center;">Dostępne produkty</h2>
+        <table class="table table-hover table-dark">
+            <thead>
+                <tr>
+                    <th scope="col">Nazwa</th>
+                    <th scope="col">Kod kreskowy</th>
+                    <th scope="col">Cena</th>
+                    <th scope="col">Opis</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                {% include 'modals/produkty.html' %}
+                <tr>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.barcode }}</td>
+                    <td>{{ item.prettier_price }}</td>
+                    <td>{{ item.description }}</td>
+                    <td>
+                        <button class="btn btn-outline btn-info" data-toggle="modal" data-target="#Info-{{ item.id }}">Opis</button>
+                        <button class="btn btn-outline btn-success" data-toggle="modal"data-target="#Buy-{{ item.id }}">Kup</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="col-4">
+        <h2 style="text-align: center;">Koszyk</h2>
+        <div class="row">
+            {% for owned_item in owned_items %}
+            {% include 'modals/kupione_produkty.html' %}
+            <div class="col-md-6">
+                <div style="margin-bottom: 5px" class="card text-center bg-dark">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ owned_item.name }}</h5>
+                        <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#Sell-{{ owned_item.id }}">Sprzedaj</button>
+                        <button type="button" class="btn btn-outline-info" data-target="#Pay-{{ owned_item.id }}">Zapłać</button>
+                        <p class="card-text">
+                            Kosztuje <strong>{{ owned_item.prettier_price }}</strong>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endblock %}
